@@ -134,13 +134,13 @@ def checkMol(row):
 
 def init(l, c):
     global lock
-    global cset
-    cset = c
     lock = l
 
 
 if __name__ == "__main__":
     import sys
+    global cset
+    cset = set()
     lg = rdkit.RDLogger.logger() 
     lg.setLevel(rdkit.RDLogger.CRITICAL)
 
@@ -168,7 +168,6 @@ if __name__ == "__main__":
     df.to_csv(out_file + "_checked.csv", sep='\t', header=False, index=False)
     print("Done scanning. Cleaned file. Outputed to original file _checked")
     print("scanning files")
-    c = set()
     lock = Lock()
     p = Pool(processes=jobs, initializer=init, initargs=(lock,c))
     p.imap_unordered(getVocab, tqdm(df.itertuples(index=False)))
