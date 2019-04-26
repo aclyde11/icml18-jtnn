@@ -148,8 +148,6 @@ if __name__ == "__main__":
     #     cset = cset.union(i)
 
     for i, row in tqdm(enumerate(df)):
-        cset = set()
-        # smiles = smiles[0]
         mol = MolTree(row)
         for c in mol.nodes:
             cset.add(c.smiles)
