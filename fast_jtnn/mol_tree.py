@@ -131,8 +131,11 @@ if __name__ == "__main__":
 
     jobs = 1
     out_file = sys.argv[2]
-    if len(sys.argv) == 4:
+    batch_size='auto'
+    if len(sys.argv) >= 4:
         jobs = int(sys.argv[3])
+    if len(sys.argv >= 5):
+        batch_size = int(sys.argv[4])
     print("Using ", jobs, " jobs. Specify job number after file name if this is wrong.")
     print("Loading file. File should have a single column with smiles. Errors will be printed.")
     df = pd.read_csv(sys.argv[1], header=None, sep='\t')
@@ -140,7 +143,7 @@ if __name__ == "__main__":
     print("File loaded. Starting generation of vocab.")
     cset = set()
 
-    sets = Parallel(n_jobs=jobs, prefer="threads", batch_size=500)(delayed(getVocab)(i, row) for i, row in tqdm(enumerate(df)))
+    sets = Parallel(n_jobs=jobs, prefer="threads", batch_size=batch_size)(delayed(getVocab)(i, row) for i, row in tqdm(enumerate(df)))
     for i in sets:
         cset = cset.union(i)
 
