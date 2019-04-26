@@ -136,10 +136,11 @@ if __name__ == "__main__":
     print("Using ", jobs, " jobs. Specify job number after file name if this is wrong.")
     print("Loading file. File should have a single column with smiles. Errors will be printed.")
     df = pd.read_csv(sys.argv[1], header=None, sep='\t')
+    df = list(df.iloc[:, 0])
     print("File loaded. Starting generation of vocab.")
     cset = set()
 
-    sets = Parallel(n_jobs=jobs, prefer="threads", batch_size=5000)(delayed(getVocab)(0, row[0]) for row in tqdm(df.itertuples(index=False)))
+    sets = Parallel(n_jobs=jobs, prefer="threads", batch_size=5000)(delayed(getVocab)(i, row) for i, row in tqdm(enumerate(df)))
     for i in sets:
         cset = cset.union(i)
 
