@@ -150,12 +150,10 @@ if __name__ == "__main__":
     for i, row in tqdm(enumerate(df)):
         cset = set()
         # smiles = smiles[0]
-        try:
-            mol = MolTree(row)
-            for c in mol.nodes:
-                cset.add(c.smiles)
-        except:
-            print("ERROR\t", i, "\t", row)
+        mol = MolTree(row)
+        for c in mol.nodes:
+            cset.add(c.smiles)
+        print("ERROR\t", i, "\t", row)
 
     print("Printing out vocab.")
     with open(out_file, 'w') as file:
