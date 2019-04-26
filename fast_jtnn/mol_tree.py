@@ -139,7 +139,6 @@ if __name__ == "__main__":
     print("Using ", jobs, " jobs. Specify job number after file name if this is wrong.")
     print("Loading file. File should have a single column with smiles. Errors will be printed.")
     df = pd.read_csv(sys.argv[1], header=None, sep='\t')
-    df = list(df.iloc[:, 0])
     print("File loaded. Starting generation of vocab.")
     cset = set()
 
@@ -147,7 +146,8 @@ if __name__ == "__main__":
     # for i in sets:
     #     cset = cset.union(i)
 
-    for row in tqdm(df):
+    for row in tqdm(df.itertuples(index=False)):
+        row = row[0]
         mol = MolTree(row)
         for c in mol.nodes:
             cset.add(c.smiles)
