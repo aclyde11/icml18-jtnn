@@ -2,7 +2,7 @@ import rdkit
 import rdkit.Chem as Chem
 from chemutils import get_clique_mol, tree_decomp, get_mol, get_smiles, set_atommap, enum_assemble, decode_stereo
 from vocab import *
-
+from tqdm import tqdm
 class MolTreeNode(object):
 
     def __init__(self, smiles, clique=[]):
@@ -116,7 +116,7 @@ if __name__ == "__main__":
     lg.setLevel(rdkit.RDLogger.CRITICAL)
 
     cset = set()
-    for line in sys.stdin:
+    for line in tqdm(sys.stdin):
         smiles = line.split()[0]
         mol = MolTree(smiles)
         for c in mol.nodes:
