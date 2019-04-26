@@ -143,18 +143,8 @@ if __name__ == "__main__":
     for i in sets:
         cset = cset.union(i)
 
-    # for i, row in tqdm(df.iterrows()):
-    #     smiles = row
-    #     print(row)
-    #     try:
-    #         mol = MolTree(smiles)
-    #         for c in mol.nodes:
-    #             cset.add(c.smiles)
-    #     except:
-    #         print("ERROR\t", smiles)
-
     print("Printing out vocab.")
     with open(out_file, 'w') as file:
         for x in tqdm(cset):
-            file.write(x)
+            file.write(x + "\n")
 
