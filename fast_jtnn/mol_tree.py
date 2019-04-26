@@ -114,14 +114,8 @@ def dfs(node, fa_idx):
 
 # Can be used for future joblib implementation.
 def getVocab(row):
-    i = row[0]
-    row = row[1]
     cset = set()
     mol = MolTree(row)
-    # try:
-    #     mol = MolTree(row)
-    # except:
-    #     print("ERROR: ", i, row)
     for c in mol.nodes:
         cset.add(c.smiles)
     return cset
@@ -144,7 +138,7 @@ if __name__ == "__main__":
     print("File loaded. Starting generation of vocab.")
     cset = set()
 
-    sets = Parallel(n_jobs=jobs)(delayed(getVocab)(row) for row in tqdm(df.itertuples(index=True)))
+    sets = Parallel(n_jobs=jobs)(delayed(getVocab)(row[0]) for row in tqdm(df.itertuples(index=False)))
     # # for i in sets:
     # #     cset = cset.union(i)
     #
