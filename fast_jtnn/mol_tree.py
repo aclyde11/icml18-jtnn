@@ -187,6 +187,6 @@ if __name__ == "__main__":
 
     print("Printing out vocab.")
     with open(out_file, 'w') as file:
-        for x in tqdm(c):
+        for x in tqdm(cset):
             file.write(x + "\n")
 
