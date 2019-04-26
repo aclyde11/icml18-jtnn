@@ -7,9 +7,10 @@ from tqdm import tqdm
 from joblib import Parallel, delayed
 from multiprocessing import Lock
 from multiprocessing import Pool
-import multiprocessing
+
 import numpy as np
 
+cset = set()
 
 class MolTreeNode(object):
 
@@ -119,28 +120,18 @@ def dfs(node, fa_idx):
 
 # Can be used for future joblib implementation.
 def getVocab(row):
-    global cset
-
+    cset = set()
     mol = MolTree(row)
 
-    lock.acquire()
     for c in mol.nodes:
-        print(len(cset))
-        cset[c.smile] = 1
-        #cset.add(c.smiles)
-    lock.release()
+        cset.add(c.smiles)
+    return cset
 
 def checkMol(row):
     if get_mol(row) is None:
         return False
     else:
         return True
-
-
-
-def init(l):
-    global lock
-    lock = l
 
 
 if __name__ == "__main__":
@@ -170,28 +161,20 @@ if __name__ == "__main__":
     del bads
     print("DF is ", df.shape)
     df.to_csv(out_file + "_checked.csv", sep='\t', header=False, index=False)
-    df = list(df.iloc[:,0])
     print("Done scanning. Cleaned file. Outputed to original file _checked")
     print("scanning files")
-    lock = Lock()
-    manager = multiprocessing.Manager()
-    cset = manager.dict()
 
-    p = Pool(processes=jobs, initializer=init, initargs=(lock,))
-    p.map(getVocab, tqdm(df))
-    p.close()
-    p.join()
-    print(len(cset))
+    cset = set()
 
     #Parallel(n_jobs=jobs)(delayed(getVocab)(lock, cset, row[0]) for row in tqdm(df.itertuples(index=False)))
     # for i in sets:
     #     cset = cset.union(i)
-    #
-    # for row in tqdm(df.itertuples(index=False)):
-    #     row = row[0]
-    #     mol = MolTree(row)
-    #     for c in mol.nodes:
-    #         cset.add(c.smiles)
+
+    for row in tqdm(df.itertuples(index=False)):
+        row = row[0]
+        mol = MolTree(row)
+        for c in mol.nodes:
+            cset.add(c.smiles)
 
     print("Printing out vocab.")
     with open(out_file, 'w') as file:
