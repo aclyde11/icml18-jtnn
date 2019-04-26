@@ -6,10 +6,11 @@ import pandas as pd
 from tqdm import tqdm
 from joblib import Parallel, delayed
 from multiprocessing import Lock
-from multiprocessing import Pool, Value
+from multiprocessing import Pool
 
 import numpy as np
 
+cset = set()
 
 class MolTreeNode(object):
 
@@ -123,9 +124,10 @@ def getVocab(row):
 
     mol = MolTree(row)
 
-    with cset.get_lock():
-        for c in mol.nodes:
-            cset.add(c.smiles)
+    lock.acquire()
+    for c in mol.nodes:
+        cset.add(c.smiles)
+    lock.release()
 
 def checkMol(row):
     if get_mol(row) is None:
@@ -135,10 +137,9 @@ def checkMol(row):
 
 
 
-def init(l, s):
-    global graph_set
-    graph_set = s
-
+def init(l):
+    global lock
+    lock = l
 
 
 if __name__ == "__main__":
@@ -172,12 +173,11 @@ if __name__ == "__main__":
     print("Done scanning. Cleaned file. Outputed to original file _checked")
     print("scanning files")
     lock = Lock()
-    v = Value('cset', set())
-    p = Pool(processes=jobs, initializer=init, initargs=(lock, v))
-    cset = p.map_async(getVocab, tqdm(df))
-    cset.wait()
-    cset = cset.get()
-
+    cset = set()
+    p = Pool(processes=jobs, initializer=init, initargs=(lock,))
+    p.map(getVocab, tqdm(df))
+    p.close()
+    p.join()
     print(len(cset))
 
     #Parallel(n_jobs=jobs)(delayed(getVocab)(lock, cset, row[0]) for row in tqdm(df.itertuples(index=False)))
