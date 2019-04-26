@@ -147,6 +147,9 @@ if __name__ == "__main__":
     #     cset = cset.union(i)
 
     for row in tqdm(df.itertuples(index=False)):
+        row[0]
+
+    for row in tqdm(df.itertuples(index=False)):
         row = row[0]
         mol = MolTree(row)
         for c in mol.nodes:
