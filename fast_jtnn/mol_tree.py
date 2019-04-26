@@ -139,7 +139,6 @@ def init(l, c):
     global cset
     global lock
     lock = l
-    cset = c
 
 
 if __name__ == "__main__":
