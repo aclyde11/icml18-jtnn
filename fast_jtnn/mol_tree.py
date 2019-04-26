@@ -113,7 +113,9 @@ def dfs(node, fa_idx):
     return max_depth + 1
 
 # Can be used for future joblib implementation.
-def getVocab(i, row):
+def getVocab(row):
+    i = row[0]
+    row = row[1]
     cset = set()
     mol = MolTree(row)
     # try:
@@ -142,7 +144,7 @@ if __name__ == "__main__":
     print("File loaded. Starting generation of vocab.")
     cset = set()
 
-    sets = Parallel(n_jobs=jobs)(delayed(getVocab)(row[0], row[1]) for row in tqdm(df.itertuples(index=True)))
+    sets = Parallel(n_jobs=jobs)(delayed(getVocab)(row) for row in tqdm(df.itertuples(index=True)))
     # # for i in sets:
     # #     cset = cset.union(i)
     #
