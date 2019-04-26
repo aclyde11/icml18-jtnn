@@ -139,7 +139,7 @@ if __name__ == "__main__":
     print("File loaded. Starting generation of vocab.")
     cset = set()
 
-    sets = Parallel(n_jobs=jobs, prefer="threads", batch_size=10000)(delayed(getVocab)(i, row[0]) for i, row in tqdm(df.iterrows()))
+    sets = Parallel(n_jobs=jobs, prefer="threads", batch_size=5000)(delayed(getVocab)(i, df.iloc[i, 0]) for i in tqdm(range(df.shape[0])))
     for i in sets:
         cset = cset.union(i)
 
