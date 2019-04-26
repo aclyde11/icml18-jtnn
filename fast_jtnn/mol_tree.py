@@ -130,11 +130,13 @@ if __name__ == "__main__":
     lg.setLevel(rdkit.RDLogger.CRITICAL)
 
     jobs = 1
-    if len(sys.argv) == 3:
-        jobs = int(sys.argv[2])
+    out_file = sys.argv[2]
+    if len(sys.argv) == 4:
+        jobs = int(sys.argv[3])
     print("Using ", jobs, " jobs. Specify job number after file name if this is wrong.")
     print("Loading file. File should have a single column with smiles. Errors will be printed.")
     df = pd.read_csv(sys.argv[1], header=None, sep='\t')
+    df = df.iloc[:10000, ...]
     print("File loaded. Starting generation of vocab.")
     cset = set()
 
@@ -153,6 +155,7 @@ if __name__ == "__main__":
     #         print("ERROR\t", smiles)
 
     print("Printing out vocab.")
-    for x in tqdm(cset):
-        print(x)
+    with open(out_file, 'w') as file:
+        for x in tqdm(cset):
+            file.write(x)
 
