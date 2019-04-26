@@ -64,7 +64,7 @@ class MolTree(object):
 
     def __init__(self, smiles):
         self.smiles = smiles
-        self.mol = get_mol(smiles)
+        self.mol = smiles
 
         #Stereo Generation (currently disabled)
         #mol = Chem.MolFromSmiles(smiles)
@@ -115,12 +115,13 @@ def dfs(node, fa_idx):
 # Can be used for future joblib implementation.
 def getVocab(row):
     cset = set()
-    mol = MolTree(row)
 
+    mol = get_mol(row)
     if mol is None:
         print("ERROR ", row)
         return
 
+    mol = MolTree(mol)
     for c in mol.nodes:
         cset.add(c.smiles)
     return cset
