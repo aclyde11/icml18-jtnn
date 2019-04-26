@@ -125,6 +125,15 @@ def getVocab(row):
         cset.add(c.smiles)
     return cset
 
+# Can be used for future joblib implementation.
+def getVocab2(row):
+    cset = set()
+    mol = MolTree(row)
+
+    for c in mol.nodes:
+        cset.add(c.smiles)
+    return cset
+
 def checkMol(row):
     if get_mol(row) is None:
         return False
@@ -163,7 +172,10 @@ if __name__ == "__main__":
 
     cset = set()
 
-    sets = Parallel(n_jobs=jobs)(delayed(getVocab)(row[0]) for row in tqdm(df.itertuples(index=False)))
+    ##sets = Parallel(n_jobs=jobs)(delayed(getVocab)(row[0]) for row in tqdm(df.itertuples(index=False)))
+
+    p = Pool(jobs)
+    sets = p.map(getVocab2, tqdm(df.itertuples(index=False)))
     for i in sets:
         cset |= i
 
