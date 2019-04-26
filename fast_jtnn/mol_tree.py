@@ -147,6 +147,7 @@ if __name__ == "__main__":
 
     bads = Parallel(n_jobs=jobs)(delayed(checkMol)(row[0]) for row in tqdm(df.itertuples(index=False)))
     bads = np.where(bads)
+    print(bads)
     print("DF was ", df.shape)
     df = df.iloc[bads, :]
     del bads
