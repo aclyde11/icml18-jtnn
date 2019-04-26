@@ -10,8 +10,6 @@ from multiprocessing import Pool
 
 import numpy as np
 
-cset = set()
-
 class MolTreeNode(object):
 
     def __init__(self, smiles, clique=[]):
@@ -166,15 +164,14 @@ if __name__ == "__main__":
 
     cset = set()
 
-    #Parallel(n_jobs=jobs)(delayed(getVocab)(lock, cset, row[0]) for row in tqdm(df.itertuples(index=False)))
-    # for i in sets:
-    #     cset = cset.union(i)
+    sets = Parallel(n_jobs=jobs)(delayed(getVocab)(row[0]) for row in tqdm(df.itertuples(index=False)))
+    for i in sets:
+        cset |= i
 
-    for row in tqdm(df.itertuples(index=False)):
-        row = row[0]
-        mol = MolTree(row)
-        for c in mol.nodes:
-            cset.add(c.smiles)
+    # for row in tqdm(df.itertuples(index=False)):
+    #     mol = MolTree(row[0])
+    #     for c in mol.nodes:
+    #         cset.add(c.smiles)
 
     print("Printing out vocab.")
     with open(out_file, 'w') as file:
