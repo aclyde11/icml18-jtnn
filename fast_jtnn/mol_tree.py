@@ -5,6 +5,8 @@ from vocab import *
 import pandas as pd
 from tqdm import tqdm
 from joblib import Parallel, delayed
+from multiprocessing import Lock
+
 import numpy as np
 class MolTreeNode(object):
 
@@ -113,13 +115,13 @@ def dfs(node, fa_idx):
     return max_depth + 1
 
 # Can be used for future joblib implementation.
-def getVocab(row):
-    cset = set()
+def getVocab(lock, cset, row):
     mol = MolTree(row)
+
+    lock.aquire()
     for c in mol.nodes:
         cset.add(c.smiles)
-
-    return cset
+    lock.release()
 
 def checkMol(row):
     if get_mol(row) is None:
@@ -142,6 +144,7 @@ if __name__ == "__main__":
     print("Using ", jobs, " jobs. Specify job number after file name if this is wrong.")
     print("Loading file. File should have a single column with smiles. Errors will be printed.")
     df = pd.read_csv(sys.argv[1], names=['SMILES'], header=None)
+    df = df.iloc[:50000, :]
     print(df.head())
     print("File loaded. Starting scan for bad smiles.")
 
@@ -156,10 +159,10 @@ if __name__ == "__main__":
     print("Done scanning. Cleaned file. Outputed to original file _checked")
     print("scanning files")
     cset = set()
-
-    sets = Parallel(n_jobs=jobs)(delayed(getVocab)(row[0]) for row in tqdm(df.itertuples(index=False)))
-    for i in sets:
-        cset = cset.union(i)
+    lock = Lock()
+    Parallel(n_jobs=jobs)(delayed(getVocab)(lock, cset, row[0]) for row in tqdm(df.itertuples(index=False)))
+    # for i in sets:
+    #     cset = cset.union(i)
     #
     # for row in tqdm(df.itertuples(index=False)):
     #     row = row[0]
