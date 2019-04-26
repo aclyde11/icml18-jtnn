@@ -124,7 +124,7 @@ def getVocab(row):
 def checkMol(row):
     if get_mol(row) is None:
         return True
-    else
+    else:
         return False
 
 if __name__ == "__main__":
