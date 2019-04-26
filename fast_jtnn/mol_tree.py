@@ -143,7 +143,6 @@ def init(l, c):
 
 if __name__ == "__main__":
     import sys
-    global cset
     lg = rdkit.RDLogger.logger()
     lg.setLevel(rdkit.RDLogger.CRITICAL)
 
