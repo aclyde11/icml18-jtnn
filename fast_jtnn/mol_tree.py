@@ -115,13 +115,9 @@ def dfs(node, fa_idx):
 # Can be used for future joblib implementation.
 def getVocab(i, smiles):
     cset = set()
-    #smiles = smiles[0]
-    try:
-        mol = MolTree(smiles)
-        for c in mol.nodes:
-            cset.add(c.smiles)
-    except:
-        print("ERROR\t", i, "\t", smiles)
+    mol = MolTree(row)
+    for c in mol.nodes:
+        cset.add(c.smiles)
     return cset
 
 if __name__ == "__main__":
@@ -142,18 +138,15 @@ if __name__ == "__main__":
     print("File loaded. Starting generation of vocab.")
     cset = set()
 
-    # sets = Parallel(n_jobs=jobs, prefer="threads", batch_size=batch_size)(delayed(getVocab)(i, row) for i, row in tqdm(enumerate(df)))
-    # for i in sets:
-    #     cset = cset.union(i)
-
-    for row in tqdm(df.itertuples(index=False)):
-        row[0]
-
-    for row in tqdm(df.itertuples(index=False)):
-        row = row[0]
-        mol = MolTree(row)
-        for c in mol.nodes:
-            cset.add(c.smiles)
+    sets = Parallel(n_jobs=jobs, prefer="threads", batch_size=batch_size)(delayed(getVocab)(row[0]) for row in tqdm(df.itertuples(index=False)))
+    # # for i in sets:
+    # #     cset = cset.union(i)
+    #
+    # for row in tqdm(df.itertuples(index=False)):
+    #     row = row[0]
+    #     mol = MolTree(row)
+    #     for c in mol.nodes:
+    #         cset.add(c.smiles)
 
     print("Printing out vocab.")
     with open(out_file, 'w') as file:
