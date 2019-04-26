@@ -126,6 +126,8 @@ def getVocab(row):
 
     lock.acquire()
     for c in mol.nodes:
+        print(len(cset))
+
         cset.add(c.smiles)
     lock.release()
 
