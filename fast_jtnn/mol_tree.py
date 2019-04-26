@@ -115,7 +115,7 @@ def dfs(node, fa_idx):
 # Can be used for future joblib implementation.
 def getVocab(i, smiles):
     cset = set()
-    smiles = smiles[0]
+    #smiles = smiles[0]
     try:
         mol = MolTree(smiles)
         for c in mol.nodes:
@@ -136,11 +136,10 @@ if __name__ == "__main__":
     print("Using ", jobs, " jobs. Specify job number after file name if this is wrong.")
     print("Loading file. File should have a single column with smiles. Errors will be printed.")
     df = pd.read_csv(sys.argv[1], header=None, sep='\t')
-    df = df.iloc[:10000, :]
     print("File loaded. Starting generation of vocab.")
     cset = set()
 
-    sets = Parallel(n_jobs=jobs)(delayed(getVocab)(i, row) for i, row in tqdm(df.iterrows()))
+    sets = Parallel(n_jobs=jobs, prefer="threads")(delayed(getVocab)(i, row[0]) for i, row in tqdm(df.iterrows()))
     for i in sets:
         cset = cset.union(i)
 
