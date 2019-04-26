@@ -115,6 +115,7 @@ def dfs(node, fa_idx):
 # Can be used for future joblib implementation.
 def getVocab(i, smiles):
     cset = set()
+    smiles = smiles[0]
     try:
         mol = MolTree(smiles)
         for c in mol.nodes:
