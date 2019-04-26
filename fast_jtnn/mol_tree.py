@@ -9,6 +9,9 @@ from multiprocessing import Lock
 from multiprocessing import Pool
 
 import numpy as np
+
+cset = set()
+
 class MolTreeNode(object):
 
     def __init__(self, smiles, clique=[]):
@@ -137,7 +140,6 @@ def init(l, c):
     global lock
     lock = l
 
-cset = set()
 
 if __name__ == "__main__":
     import sys
