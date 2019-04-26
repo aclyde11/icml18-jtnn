@@ -133,15 +133,16 @@ def checkMol(row):
 
 
 def init(l, c):
+    global cset
     global lock
     lock = l
 
+cset = set()
 
 if __name__ == "__main__":
     import sys
     global cset
-    cset = set()
-    lg = rdkit.RDLogger.logger() 
+    lg = rdkit.RDLogger.logger()
     lg.setLevel(rdkit.RDLogger.CRITICAL)
 
     jobs = 1
