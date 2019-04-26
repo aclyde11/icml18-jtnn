@@ -143,9 +143,19 @@ if __name__ == "__main__":
     print("File loaded. Starting generation of vocab.")
     cset = set()
 
-    sets = Parallel(n_jobs=jobs, prefer="threads", batch_size=batch_size)(delayed(getVocab)(i, row) for i, row in tqdm(enumerate(df)))
-    for i in sets:
-        cset = cset.union(i)
+    # sets = Parallel(n_jobs=jobs, prefer="threads", batch_size=batch_size)(delayed(getVocab)(i, row) for i, row in tqdm(enumerate(df)))
+    # for i in sets:
+    #     cset = cset.union(i)
+
+    for i, row in tqdm(enumerate(df)):
+        cset = set()
+        # smiles = smiles[0]
+        try:
+            mol = MolTree(row)
+            for c in mol.nodes:
+                cset.add(c.smiles)
+        except:
+            print("ERROR\t", i, "\t", row)
 
     print("Printing out vocab.")
     with open(out_file, 'w') as file:
