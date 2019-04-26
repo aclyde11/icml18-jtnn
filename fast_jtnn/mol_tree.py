@@ -125,6 +125,7 @@ def getVocab(row):
     lock.acquire()
     for c in mol.nodes:
         cset.add(c.smiles)
+    print(len(cset))
     lock.release()
 
 def checkMol(row):
@@ -176,6 +177,7 @@ if __name__ == "__main__":
     p.map(getVocab, tqdm(df))
     p.close()
     p.join()
+    print(len(cset))
 
     #Parallel(n_jobs=jobs)(delayed(getVocab)(lock, cset, row[0]) for row in tqdm(df.itertuples(index=False)))
     # for i in sets:
