@@ -64,7 +64,7 @@ class MolTree(object):
 
     def __init__(self, smiles):
         self.smiles = smiles
-        self.mol = smiles
+        self.mol = get_mol(smiles)
 
         #Stereo Generation (currently disabled)
         #mol = Chem.MolFromSmiles(smiles)
@@ -115,16 +115,17 @@ def dfs(node, fa_idx):
 # Can be used for future joblib implementation.
 def getVocab(row):
     cset = set()
-
-    mol = get_mol(row)
-    if mol is None:
-        print("ERROR ", row)
-        return
-
-    mol = MolTree(mol)
+    mol = MolTree(row)
     for c in mol.nodes:
         cset.add(c.smiles)
+
     return cset
+
+def checkMol(row):
+    if get_mol(row) is None:
+        return True
+    else
+        return False
 
 if __name__ == "__main__":
     import sys
@@ -141,7 +142,11 @@ if __name__ == "__main__":
     print("Using ", jobs, " jobs. Specify job number after file name if this is wrong.")
     print("Loading file. File should have a single column with smiles. Errors will be printed.")
     df = pd.read_csv(sys.argv[1], header=None, sep='\t')
-    print("File loaded. Starting generation of vocab.")
+    print("File loaded. Starting scan for bad smiles.")
+
+    bads = Parallel(n_jobs=jobs)(delayed(checkMol)(row[0]) for row in tqdm(df.itertuples(index=False)))
+
+
     cset = set()
 
     sets = Parallel(n_jobs=jobs)(delayed(getVocab)(row[0]) for row in tqdm(df.itertuples(index=False)))
