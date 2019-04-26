@@ -156,7 +156,6 @@ if __name__ == "__main__":
     print("Using ", jobs, " jobs. Specify job number after file name if this is wrong.")
     print("Loading file. File should have a single column with smiles. Errors will be printed.")
     df = pd.read_csv(sys.argv[1], names=['SMILES'], header=None)
-    df = df.iloc[:50000, :]
     print(df.head())
     print("File loaded. Starting scan for bad smiles.")
 
@@ -175,7 +174,6 @@ if __name__ == "__main__":
 
     ##sets = Parallel(n_jobs=jobs)(delayed(getVocab)(row[0]) for row in tqdm(df.itertuples(index=False)))
     df = list(df.iloc[:,0])
-    print(df)
     p = Pool(jobs)
     sets = p.map(getVocab2, tqdm(df))
     for i in sets:
