@@ -169,7 +169,7 @@ if __name__ == "__main__":
     print("Done scanning. Cleaned file. Outputed to original file _checked")
     print("scanning files")
     lock = Lock()
-    p = Pool(processes=jobs, initializer=init, initargs=(lock,c))
+    p = Pool(processes=jobs, initializer=init, initargs=(lock,cset))
     p.imap_unordered(getVocab, tqdm(df.itertuples(index=False)))
     p.close()
     p.join()
