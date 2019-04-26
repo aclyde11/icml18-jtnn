@@ -117,10 +117,11 @@ def getVocab(row):
     cset = set()
     try:
         mol = MolTree(row)
+
+        for c in mol.nodes:
+            cset.add(c.smiles)
     except:
         print("ERROR ", row)
-    for c in mol.nodes:
-        cset.add(c.smiles)
     return cset
 
 if __name__ == "__main__":
