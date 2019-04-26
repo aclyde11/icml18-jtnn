@@ -173,7 +173,7 @@ if __name__ == "__main__":
     print("scanning files")
     lock = Lock()
     p = Pool(processes=jobs, initializer=init, initargs=(lock,cset))
-    p.imap_unordered(getVocab, tqdm(df.itertuples(index=False)))
+    p.map(getVocab, tqdm(df.itertuples(index=False)))
     p.close()
     p.join()
 
