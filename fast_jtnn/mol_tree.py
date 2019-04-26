@@ -116,8 +116,9 @@ if __name__ == "__main__":
     lg = rdkit.RDLogger.logger() 
     lg.setLevel(rdkit.RDLogger.CRITICAL)
 
-    df = pd.read_table(sys.argv[1], header=None)
-
+    print("Loading file. File should have a single column with smiles. Errors will be printed.")
+    df = pd.read_csv(sys.argv[1], header=None, sep='\t')
+    print("File loaded. Starting generation of vocab.")
     cset = set()
     for i, row in tqdm(df.iterrows()):
         smiles = row
@@ -129,6 +130,7 @@ if __name__ == "__main__":
         except:
             print("ERROR\t", smiles)
 
-    for x in cset:
+    print("Printing out vocab.")
+    for x in tqdm(cset):
         print x
 
