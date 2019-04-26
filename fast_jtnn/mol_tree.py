@@ -123,7 +123,7 @@ def getVocab(row):
     row = row[0]
     mol = MolTree(row)
 
-    lock.aquire()
+    lock.acquire()
     for c in mol.nodes:
         print("i")
         cset.add(c.smiles)
