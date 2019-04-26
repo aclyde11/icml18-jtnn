@@ -5,7 +5,7 @@ from vocab import *
 import pandas as pd
 from tqdm import tqdm
 from joblib import Parallel, delayed
-
+import numpy as np
 class MolTreeNode(object):
 
     def __init__(self, smiles, clique=[]):
@@ -145,13 +145,19 @@ if __name__ == "__main__":
     print("File loaded. Starting scan for bad smiles.")
 
     bads = Parallel(n_jobs=jobs)(delayed(checkMol)(row[0]) for row in tqdm(df.itertuples(index=False)))
-
-
+    bads = np.where(~bads)
+    print("DF was ", df.shape)
+    df = df.iloc[bads, :]
+    del bads
+    print("DF is ", df.shape)
+    df.to_csv(out_file + "_checked.csv", sep='\t', header=False, index=False)
+    print("Done scanning. Cleaned file. Outputed to original file _checked")
+    print("scanning files")
     cset = set()
 
     sets = Parallel(n_jobs=jobs)(delayed(getVocab)(row[0]) for row in tqdm(df.itertuples(index=False)))
-    # # for i in sets:
-    # #     cset = cset.union(i)
+    for i in sets:
+        cset = cset.union(i)
     #
     # for row in tqdm(df.itertuples(index=False)):
     #     row = row[0]
