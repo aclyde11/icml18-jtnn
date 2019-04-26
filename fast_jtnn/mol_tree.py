@@ -123,9 +123,9 @@ def getVocab(row):
     mol = MolTree(row)
 
     lock.acquire()
+    print(len(cset))
     for c in mol.nodes:
         cset.add(c.smiles)
-    print(len(cset))
     lock.release()
 
 def checkMol(row):
