@@ -134,7 +134,7 @@ if __name__ == "__main__":
     batch_size='auto'
     if len(sys.argv) >= 4:
         jobs = int(sys.argv[3])
-    if len(sys.argv >= 5):
+    if len(sys.argv) >= 5:
         batch_size = int(sys.argv[4])
     print("Using ", jobs, " jobs. Specify job number after file name if this is wrong.")
     print("Loading file. File should have a single column with smiles. Errors will be printed.")
