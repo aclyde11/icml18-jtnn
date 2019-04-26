@@ -113,16 +113,15 @@ def dfs(node, fa_idx):
     return max_depth + 1
 
 # Can be used for future joblib implementation.
-def getVocab(smile):
+def getVocab(i, row):
     cset = set()
     smiles = row
-    print(row)
     try:
         mol = MolTree(smiles)
         for c in mol.nodes:
             cset.add(c.smiles)
     except:
-        print("ERROR\t", smiles)
+        print("ERROR\t", i, "\t", smiles)
     return cset
 
 if __name__ == "__main__":
@@ -138,15 +137,20 @@ if __name__ == "__main__":
     df = pd.read_csv(sys.argv[1], header=None, sep='\t')
     print("File loaded. Starting generation of vocab.")
     cset = set()
-    for i, row in tqdm(df.iterrows()):
-        smiles = row
-        print(row)
-        try:
-            mol = MolTree(smiles)
-            for c in mol.nodes:
-                cset.add(c.smiles)
-        except:
-            print("ERROR\t", smiles)
+
+    sets = Parallel(n_jobs=jobs)(delayed(getVocab)(i, row) for i, row in tqdm(df.iterrows()))
+    for i in sets:
+        cset = cset.union(i)
+
+    # for i, row in tqdm(df.iterrows()):
+    #     smiles = row
+    #     print(row)
+    #     try:
+    #         mol = MolTree(smiles)
+    #         for c in mol.nodes:
+    #             cset.add(c.smiles)
+    #     except:
+    #         print("ERROR\t", smiles)
 
     print("Printing out vocab.")
     for x in tqdm(cset):
