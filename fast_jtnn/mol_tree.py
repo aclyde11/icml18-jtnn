@@ -4,6 +4,8 @@ from chemutils import get_clique_mol, tree_decomp, get_mol, get_smiles, set_atom
 from vocab import *
 import pandas as pd
 from tqdm import tqdm
+from joblib import Parallel, delayed
+
 class MolTreeNode(object):
 
     def __init__(self, smiles, clique=[]):
@@ -110,12 +112,28 @@ def dfs(node, fa_idx):
         max_depth = max(max_depth, dfs(child, node.idx))
     return max_depth + 1
 
+# Can be used for future joblib implementation.
+def getVocab(smile):
+    cset = set()
+    smiles = row
+    print(row)
+    try:
+        mol = MolTree(smiles)
+        for c in mol.nodes:
+            cset.add(c.smiles)
+    except:
+        print("ERROR\t", smiles)
+    return cset
 
 if __name__ == "__main__":
     import sys
     lg = rdkit.RDLogger.logger() 
     lg.setLevel(rdkit.RDLogger.CRITICAL)
 
+    jobs = 1
+    if len(sys.argv) == 3:
+        jobs = int(sys.argv[2])
+    print("Using ", jobs, " jobs. Specify job number after file name if this is wrong.")
     print("Loading file. File should have a single column with smiles. Errors will be printed.")
     df = pd.read_csv(sys.argv[1], header=None, sep='\t')
     print("File loaded. Starting generation of vocab.")
@@ -132,5 +150,5 @@ if __name__ == "__main__":
 
     print("Printing out vocab.")
     for x in tqdm(cset):
-        print x
+        print(x)
 
