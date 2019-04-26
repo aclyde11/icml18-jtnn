@@ -143,7 +143,6 @@ if __name__ == "__main__":
     print("Loading file. File should have a single column with smiles. Errors will be printed.")
     df = pd.read_csv(sys.argv[1], names=['SMILES'], header=None)
     print(df.head())
-    df = df.iloc[:10000, :]
     print("File loaded. Starting scan for bad smiles.")
 
     bads = Parallel(n_jobs=jobs)(delayed(checkMol)(row[0]) for row in tqdm(df.itertuples(index=False)))
