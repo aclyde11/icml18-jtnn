@@ -150,7 +150,7 @@ if __name__ == "__main__":
     bads = np.where(bads)
     print(bads)
     print("DF was ", df.shape)
-    df = df.iloc[bads, :]
+    df = df.iloc[bads]
     del bads
     print("DF is ", df.shape)
     df.to_csv(out_file + "_checked.csv", sep='\t', header=False, index=False)
