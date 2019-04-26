@@ -10,7 +10,6 @@ from multiprocessing import Pool
 import multiprocessing
 import numpy as np
 
-cset = set()
 
 class MolTreeNode(object):
 
@@ -175,9 +174,8 @@ if __name__ == "__main__":
     print("Done scanning. Cleaned file. Outputed to original file _checked")
     print("scanning files")
     lock = Lock()
-    cset = set()
     manager = multiprocessing.Manager()
-    final_list = manager.dict()
+    cset = manager.dict()
 
     p = Pool(processes=jobs, initializer=init, initargs=(lock,))
     p.map(getVocab, tqdm(df))
