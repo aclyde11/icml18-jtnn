@@ -136,7 +136,7 @@ if __name__ == "__main__":
     print("Using ", jobs, " jobs. Specify job number after file name if this is wrong.")
     print("Loading file. File should have a single column with smiles. Errors will be printed.")
     df = pd.read_csv(sys.argv[1], header=None, sep='\t')
-    df = df.iloc[:10000, ...]
+    df = df.iloc[:10000, :]
     print("File loaded. Starting generation of vocab.")
     cset = set()
 
