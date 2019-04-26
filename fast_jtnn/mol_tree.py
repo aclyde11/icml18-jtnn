@@ -138,7 +138,7 @@ def checkMol(row):
 
 
 
-def init(l, c):
+def init(l):
     global lock
     lock = l
 
@@ -174,7 +174,7 @@ if __name__ == "__main__":
     print("Done scanning. Cleaned file. Outputed to original file _checked")
     print("scanning files")
     lock = Lock()
-    p = Pool(processes=jobs, initializer=init, initargs=(lock,cset))
+    p = Pool(processes=jobs, initializer=init, initargs=(lock,))
     p.map(getVocab, tqdm(df))
     p.close()
     p.join()
