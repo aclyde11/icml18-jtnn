@@ -120,6 +120,7 @@ def dfs(node, fa_idx):
 
 # Can be used for future joblib implementation.
 def getVocab(row):
+    row = row[0]
     mol = MolTree(row)
 
     lock.aquire()
