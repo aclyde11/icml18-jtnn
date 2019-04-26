@@ -6,6 +6,7 @@ import pandas as pd
 from tqdm import tqdm
 from joblib import Parallel, delayed
 from multiprocessing import Lock
+from multiprocessing import Pool
 
 import numpy as np
 class MolTreeNode(object):
@@ -115,7 +116,7 @@ def dfs(node, fa_idx):
     return max_depth + 1
 
 # Can be used for future joblib implementation.
-def getVocab(lock, cset, row):
+def getVocab(row):
     mol = MolTree(row)
 
     lock.aquire()
@@ -128,6 +129,15 @@ def checkMol(row):
         return False
     else:
         return True
+
+
+
+def init(l, c):
+    global lock
+    global cset
+    cset = c
+    lock = l
+
 
 if __name__ == "__main__":
     import sys
@@ -158,9 +168,14 @@ if __name__ == "__main__":
     df.to_csv(out_file + "_checked.csv", sep='\t', header=False, index=False)
     print("Done scanning. Cleaned file. Outputed to original file _checked")
     print("scanning files")
-    cset = set()
+    c = set()
     lock = Lock()
-    Parallel(n_jobs=jobs)(delayed(getVocab)(lock, cset, row[0]) for row in tqdm(df.itertuples(index=False)))
+    p = Pool(processes=jobs, initializer=init, initargs=(lock,c))
+    p.imap_unordered(getVocab, tqdm(df.itertuples(index=False)))
+    p.close()
+    p.join()
+
+    #Parallel(n_jobs=jobs)(delayed(getVocab)(lock, cset, row[0]) for row in tqdm(df.itertuples(index=False)))
     # for i in sets:
     #     cset = cset.union(i)
     #
@@ -172,6 +187,6 @@ if __name__ == "__main__":
 
     print("Printing out vocab.")
     with open(out_file, 'w') as file:
-        for x in tqdm(cset):
+        for x in tqdm(c):
             file.write(x + "\n")
 
