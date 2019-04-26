@@ -115,10 +115,11 @@ def dfs(node, fa_idx):
 # Can be used for future joblib implementation.
 def getVocab(i, row):
     cset = set()
-    try:
-        mol = MolTree(row)
-    except:
-        print("ERROR: ", i, row)
+    mol = MolTree(row)
+    # try:
+    #     mol = MolTree(row)
+    # except:
+    #     print("ERROR: ", i, row)
     for c in mol.nodes:
         cset.add(c.smiles)
     return cset
