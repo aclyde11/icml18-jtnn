@@ -7,7 +7,7 @@ from tqdm import tqdm
 from joblib import Parallel, delayed
 from multiprocessing import Lock
 from multiprocessing import Pool
-
+import multiprocessing
 import numpy as np
 
 cset = set()
@@ -127,8 +127,8 @@ def getVocab(row):
     lock.acquire()
     for c in mol.nodes:
         print(len(cset))
-
-        cset.add(c.smiles)
+        cset[c.smile] = 1
+        #cset.add(c.smiles)
     lock.release()
 
 def checkMol(row):
@@ -176,6 +176,9 @@ if __name__ == "__main__":
     print("scanning files")
     lock = Lock()
     cset = set()
+    manager = multiprocessing.Manager()
+    final_list = manager.dict()
+
     p = Pool(processes=jobs, initializer=init, initargs=(lock,))
     p.map(getVocab, tqdm(df))
     p.close()
