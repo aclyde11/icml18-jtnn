@@ -123,9 +123,9 @@ def getVocab(row):
 
 def checkMol(row):
     if get_mol(row) is None:
-        return True
-    else:
         return False
+    else:
+        return True
 
 if __name__ == "__main__":
     import sys
@@ -142,10 +142,11 @@ if __name__ == "__main__":
     print("Using ", jobs, " jobs. Specify job number after file name if this is wrong.")
     print("Loading file. File should have a single column with smiles. Errors will be printed.")
     df = pd.read_csv(sys.argv[1], header=None, sep='\t')
+    df = df.iloc[:10000, :]
     print("File loaded. Starting scan for bad smiles.")
 
     bads = Parallel(n_jobs=jobs)(delayed(checkMol)(row[0]) for row in tqdm(df.itertuples(index=False)))
-    bads = np.where(~bads)
+    bads = np.where(bads)
     print("DF was ", df.shape)
     df = df.iloc[bads, :]
     del bads
