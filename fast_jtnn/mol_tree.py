@@ -113,9 +113,8 @@ def dfs(node, fa_idx):
     return max_depth + 1
 
 # Can be used for future joblib implementation.
-def getVocab(i, row):
+def getVocab(i, smiles):
     cset = set()
-    smiles = row[0]
     try:
         mol = MolTree(smiles)
         for c in mol.nodes:
