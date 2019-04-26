@@ -120,6 +120,8 @@ def dfs(node, fa_idx):
 
 # Can be used for future joblib implementation.
 def getVocab(row):
+    global cset
+
     mol = MolTree(row)
 
     lock.acquire()
@@ -137,7 +139,6 @@ def checkMol(row):
 
 
 def init(l, c):
-    global cset
     global lock
     lock = l
 
