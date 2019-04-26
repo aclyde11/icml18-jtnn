@@ -170,12 +170,11 @@ if __name__ == "__main__":
     print("DF is ", df.shape)
     df.to_csv(out_file + "_checked.csv", sep='\t', header=False, index=False)
     df = list(df.iloc[:,0])
-    print(list)
     print("Done scanning. Cleaned file. Outputed to original file _checked")
     print("scanning files")
     lock = Lock()
     p = Pool(processes=jobs, initializer=init, initargs=(lock,cset))
-    p.map(getVocab, df)
+    p.map(getVocab, tqdm(df))
     p.close()
     p.join()
 
