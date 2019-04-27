@@ -4,7 +4,7 @@ from scipy.sparse import csr_matrix
 from scipy.sparse.csgraph import minimum_spanning_tree
 from collections import defaultdict
 from rdkit.Chem.EnumerateStereoisomers import EnumerateStereoisomers, StereoEnumerationOptions
-from vocab import Vocab
+from .vocab import Vocab
 
 MST_MAX_WEIGHT = 100 
 MAX_NCAND = 2000
@@ -136,7 +136,7 @@ def tree_decomp(mol):
                     if edges[(c1,c2)] < len(inter):
                         edges[(c1,c2)] = len(inter) #cnei[i] < cnei[j] by construction
 
-    edges = [u + (MST_MAX_WEIGHT-v,) for u,v in edges.items()]
+    edges = [u + (MST_MAX_WEIGHT-v,) for u,v in list(edges.items())]
     if len(edges) == 0:
         return cliques, edges
 

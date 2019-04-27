@@ -1,7 +1,7 @@
 import rdkit
 import rdkit.Chem as Chem
-from chemutils import get_clique_mol, tree_decomp, get_mol, get_smiles, set_atommap, enum_assemble, decode_stereo
-from vocab import *
+from .chemutils import get_clique_mol, tree_decomp, get_mol, get_smiles, set_atommap, enum_assemble, decode_stereo
+from .vocab import *
 import pandas as pd
 from tqdm import tqdm
 from joblib import Parallel, delayed
@@ -59,7 +59,7 @@ class MolTreeNode(object):
         if len(new_cands) > 0: cands = new_cands
 
         if len(cands) > 0:
-            self.cands, _ = zip(*cands)
+            self.cands, _ = list(zip(*cands))
             self.cands = list(self.cands)
         else:
             self.cands = []
@@ -153,19 +153,19 @@ if __name__ == "__main__":
         jobs = int(sys.argv[3])
     if len(sys.argv) >= 5:
         batch_size = int(sys.argv[4])
-    print("Using ", jobs, " jobs. Specify job number after file name if this is wrong.")
+    print(("Using ", jobs, " jobs. Specify job number after file name if this is wrong."))
     print("Loading file. File should have a single column with smiles. Errors will be printed.")
     df = pd.read_csv(sys.argv[1], names=['SMILES'], header=None)
-    print(df.head())
+    print((df.head()))
     print("File loaded. Starting scan for bad smiles.")
 
     bads = Parallel(n_jobs=jobs)(delayed(checkMol)(row[0]) for row in tqdm(df.itertuples(index=False)))
     bads = np.where(bads)
     print(bads)
-    print("DF was ", df.shape)
+    print(("DF was ", df.shape))
     df = df.iloc[bads]
     del bads
-    print("DF is ", df.shape)
+    print(("DF is ", df.shape))
     df.to_csv(out_file + "_checked.csv", sep='\t', header=False, index=False)
     print("Done scanning. Cleaned file. Outputed to original file _checked")
     print("scanning files")
