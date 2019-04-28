@@ -43,7 +43,6 @@ if __name__ == "__main__":
         data = [line.strip("\r\n ").split()[0] for line in f]
     print("data length", len(data))
     print("Mapping data to pool")
-    data = data[:20000]
     all_data = pool.map(tensorize, tqdm(data))
     del data
     "Done"
