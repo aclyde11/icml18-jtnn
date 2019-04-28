@@ -50,7 +50,6 @@ if __name__ == "__main__":
     print("creating splits.")
     for split_id in tqdm(list(range(num_splits))):
         st = split_id * le
-        print("st", st , "le", le)
         sub_data = all_data[st : st + le]
 
         with open('tensors-%d.pkl' % split_id, 'wb') as f:
