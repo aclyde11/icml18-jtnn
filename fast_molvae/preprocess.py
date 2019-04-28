@@ -42,10 +42,13 @@ if __name__ == "__main__":
     with open(opts.train_path) as f:
         data = [line.strip("\r\n ").split()[0] for line in f]
 
-    all_data = pool.map(tensorize, data)
+    print("Mapping data to pool")
+    data = data[:10000]
+    all_data = pool.map(tensorize, tqdm(data))
 
+    "Done"
     le = (len(all_data) + num_splits - 1) / num_splits
-
+    print("creating splits.")
     for split_id in tqdm(list(range(num_splits))):
         st = split_id * le
         sub_data = all_data[st : st + le]
