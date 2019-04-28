@@ -47,7 +47,7 @@ if __name__ == "__main__":
     all_data = pool.map(tensorize, tqdm(data))
     del data
     "Done"
-    le = (len(all_data) + num_splits - 1) / num_splits
+    le = int((len(all_data) + num_splits - 1) / num_splits)
     print("creating splits.")
     for split_id in tqdm(list(range(num_splits))):
         st = split_id * le
