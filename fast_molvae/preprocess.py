@@ -45,12 +45,13 @@ if __name__ == "__main__":
     print("Mapping data to pool")
     data = data[:10000]
     all_data = pool.map(tensorize, tqdm(data))
-
+    del data
     "Done"
     le = (len(all_data) + num_splits - 1) / num_splits
     print("creating splits.")
     for split_id in tqdm(list(range(num_splits))):
         st = split_id * le
+        print("st", st , "le", le)
         sub_data = all_data[st : st + le]
 
         with open('tensors-%d.pkl' % split_id, 'wb') as f:
