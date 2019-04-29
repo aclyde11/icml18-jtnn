@@ -60,7 +60,8 @@ if __name__ == "__main__":
     if rank == 0:
         indicies = np.array(list(range(data.shape[0])))
         indicies = np.array_split(indicies, size)
-
+    else:
+        indicies = None
 
     indicies = comm.scatter(indicies, root=0)
     indicies = print(indicies.shape)
