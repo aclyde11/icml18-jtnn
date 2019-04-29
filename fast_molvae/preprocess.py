@@ -9,6 +9,7 @@ import pickle as pickle
 from fast_jtnn import *
 import rdkit
 from tqdm import tqdm
+from joblib import Parallel, Delayed
 
 def tensorize(smiles, assm=True):
     mol_tree = MolTree(smiles)
@@ -44,7 +45,9 @@ if __name__ == "__main__":
     print("data length", len(data))
     print("Mapping data to pool")
     data = data[:5000000]
-    all_data = pool.map(tensorize, tqdm(data))
+    #all_data = pool.map(tensorize, tqdm(data))
+    all_data = Parallel(n_jobs=opts.njobs)(Delayed(tensorize)(arg) for arg in tqdm(data))
+
     "Done"
     le = int((len(all_data) + num_splits - 1) / num_splits)
     print("creating splits.")
