@@ -52,7 +52,7 @@ if __name__ == "__main__":
 
 
     data = pd.read_csv(opts.train_path, header=None, names=["SMILES"])
-    print(data[0])
+    print(data.head())
     print("data length", len(data))
     print("Mapping data to pool")
     data = data.iloc[:5000000,:]
