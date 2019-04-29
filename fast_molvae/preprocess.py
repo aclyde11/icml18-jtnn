@@ -1,6 +1,8 @@
 import torch
 import torch.nn as nn
 from multiprocessing import Pool
+from rdkit import rdBase
+rdBase.DisableLog('rdApp.error')
 
 import math, random, sys
 from optparse import OptionParser
