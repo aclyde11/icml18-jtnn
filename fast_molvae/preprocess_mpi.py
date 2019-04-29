@@ -51,7 +51,7 @@ if __name__ == "__main__":
     opts.njobs = int(opts.njobs)
 
 
-    data = pd.read_csv(opts.train, header=None, names=["SMILES"])
+    data = pd.read_csv(opts.train_path, header=None, names=["SMILES"])
     print(data[0])
     print("data length", len(data))
     print("Mapping data to pool")
