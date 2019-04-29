@@ -70,7 +70,14 @@ if __name__ == "__main__":
 
     data = data.iloc[indicies,:]
     print("I am {} with data ".format(rank), data.shape)
-    all_data = Parallel(n_jobs=opts.njobs)(delayed(tensorize)(arg[0]) for arg in tqdm(data.itertuples(index=False)))
+    # all_data = Parallel(n_jobs=opts.njobs)(delayed(tensorize)(arg[0]) for arg in tqdm(data.itertuples(index=False)))
+
+    all_data = []
+    for i, row in enumerate(data.itertuples(index=False)):
+        if i % 1000 == 0:
+            print("I AM {} and I HAVE DONE {}".format(rank, i) )
+        all_data.append(tensorize(row[0]))
+
     "Done"
 
 
