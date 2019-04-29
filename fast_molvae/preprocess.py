@@ -42,6 +42,7 @@ if __name__ == "__main__":
 
     with open(opts.train_path) as f:
         data = [line.strip("\r\n ").split()[0] for line in f]
+    print(data[0])
     print("data length", len(data))
     print("Mapping data to pool")
     data = data[:5000000]
