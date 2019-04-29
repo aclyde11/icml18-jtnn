@@ -65,8 +65,8 @@ if __name__ == "__main__":
 
     indicies = comm.scatter(indicies, root=0)
     indicies = list(indicies)
-    if rank == 2:
-        print(indicies)
+    # if rank == 2:
+        # print(indicies)
 
     data = data.iloc[indicies,:]
     print("I am {} with data ".format(rank), data.shape)
