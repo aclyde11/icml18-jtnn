@@ -26,7 +26,7 @@ def tensorize(smiles, assm=True):
     return mol_tree
 
 if __name__ == "__main__":
-    lg = rdkit.RDLogger.logger() 
+    lg = rdkit.RDLogger.logger()
     lg.setLevel(rdkit.RDLogger.CRITICAL)
 
     parser = OptionParser()
@@ -43,8 +43,8 @@ if __name__ == "__main__":
         data = [line.strip("\r\n ").split()[0] for line in f]
     print("data length", len(data))
     print("Mapping data to pool")
+    data = data[:10000000]
     all_data = pool.map(tensorize, tqdm(data))
-    del data
     "Done"
     le = int((len(all_data) + num_splits - 1) / num_splits)
     print("creating splits.")
@@ -54,4 +54,3 @@ if __name__ == "__main__":
 
         with open('tensors-%d.pkl' % split_id, 'wb') as f:
             pickle.dump(sub_data, f, pickle.HIGHEST_PROTOCOL)
-
