@@ -44,9 +44,9 @@ if __name__ == "__main__":
     print("data length", len(data))
     print("Mapping data to pool")
     data = data[:10000000]
-    all_data = pool.imap_unordered(tensorize, tqdm(data))
+    all_data = pool.map(tensorize, tqdm(data))
     "Done"
-    le = int((len(data) + num_splits - 1) / num_splits)
+    le = int((len(all_data) + num_splits - 1) / num_splits)
     print("creating splits.")
     for split_id in tqdm(list(range(num_splits))):
         st = split_id * le
