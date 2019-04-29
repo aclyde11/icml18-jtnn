@@ -59,7 +59,7 @@ if __name__ == "__main__":
 
     if rank == 0:
         indicies = np.array(list(range(data.shape[0])))
-        indicies = np.array_split(indicies, size)
+        indicies = np.array_split(indicies, size).tolist()
     else:
         indicies = None
 
